@@ -1,21 +1,55 @@
 // [Template no Kotlin Playground](https://pl.kotl.in/WcteahpyN)
 
-enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
+enum class Level {BASICO, INTERMEDIARIO, AVANCADO}
 
-class Usuario
+data class User(val name: String)
 
-data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
+data class EducationalContent(val name: String, val duration: Int = 60)
 
-data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
+data class Training(val name: String, val level: Level, val contents: List<EducationalContent>) {
 
-    val inscritos = mutableListOf<Usuario>()
+    val registered = mutableListOf<User>()
     
-    fun matricular(usuario: Usuario) {
-        TODO("Utilize o parâmetro $usuario para simular uma matrícula (usar a lista de $inscritos).")
+    fun enroll(user: User) {
+        if (!registered.contains(user)) {
+            registered.add(user)
+            println("Usuário ${user.name} matriculado na formação: $name .")
+        } else{
+            println("Usuário ${user.name} já está matriculado na formação: $name .")
+        }
     }
 }
 
 fun main() {
-    TODO("Analise as classes modeladas para este domínio de aplicação e pense em formas de evoluí-las.")
-    TODO("Simule alguns cenários de teste. Para isso, crie alguns objetos usando as classes em questão.")
+    val kotlinBasic = EducationalContent("Introdução ao kotlin", 45)
+    val pookotlin = EducationalContent("POO em kotlin", 60)
+    val collectionsKotlin = EducationalContent("Coleções em kotlin", 75)
+    
+    val trainingKotlin = Training(
+        name = "Formação Kotlin Developer",
+        level = Level.INTERMEDIARIO,
+        contents = listOf(kotlinBasic, pookotlin, collectionsKotlin)
+    )
+    
+    val carlos = User("Carlos")
+    val lucas = User("Lucas")
+    val renata = User("Renata")
+    
+    trainingKotlin.enroll(carlos)
+    trainingKotlin.enroll(lucas)
+    trainingKotlin.enroll(renata)
+    trainingKotlin.enroll(carlos) // Test for duplicates
+    
+    println("Relatório da Formação")
+    println("Formação: ${trainingKotlin.name}")
+    println("Nível: ${trainingKotlin.level}")
+    println("Conteúdos:")
+    trainingKotlin.contents.forEach {
+        println(" - ${it.name} (${it.duration} min)")
+    }
+    
+    println("Inscritos:")
+    trainingKotlin.registered.forEach {
+        println(" - ${it.name}")
+    }
 }
